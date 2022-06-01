@@ -2,9 +2,9 @@
 	<div class="hello">
 		<h1 class="pb-5">{{ msg }}</h1>
 		<h4 class="pb-5">Choose a difficulty:</h4>
-		<button type="button" class="col-12 col-sm-6 col-md-4 cs-btn">Easy Mode</button>
-		<button type="button" class="col-12 col-sm-6 col-md-4 cs-btn">Normal Mode</button>
-		<button type="button" class="col-12 col-sm-6 col-md-4 cs-btn">Hard Mode</button>
+		<router-link to="game" class="col-12 col-sm-6 col-md-4 cs-btn">Easy Mode</router-link>
+		<router-link to="game" class="col-12 col-sm-6 col-md-4 cs-btn">Normal Mode</router-link>
+    <router-link to="game" class="col-12 col-sm-6 col-md-4 cs-btn">Hard Mode</router-link>
 	</div>
 </template>
 

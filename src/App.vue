@@ -9,20 +9,16 @@
 						src="./assets/img/logo.png"
 					/>
 				</div>
-				<HomePage class="pt-4" msg="You want to be a millionaire?" />
+        <router-view></router-view>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import HomePage from "./components/HomePage.vue";
 
 export default {
 	name: "App",
-	components: {
-		HomePage,
-	},
 	data() {
 		return {
 			game: {
