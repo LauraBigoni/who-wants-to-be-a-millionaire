@@ -1,5 +1,7 @@
 <template>
-	<div></div>
+	<div class="card my-5" id="answers">
+		<div class="card-body">ANSWERS</div>
+	</div>
 </template>
 
 <script>
@@ -8,5 +10,5 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 </style>

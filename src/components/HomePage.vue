@@ -13,17 +13,17 @@
 			"
 		>
 			<router-link
-				:to="{ name: 'game', params: { easy: game['easy'] } }"
+				:to="{ name: 'game', params: { easy: this.game.easy } }"
 				class="cs-btn"
 				>Easy Mode</router-link
 			>
 			<router-link
-				:to="{ name: 'game', params: { normal: game['normal'] } }"
+				:to="{ name: 'game', params: { normal: this.game.normal } }"
 				class="cs-btn"
 				>Normal Mode</router-link
 			>
 			<router-link
-				:to="{ name: 'game', params: { hard: game['hard'] } }"
+				:to="{ name: 'game', params: { hard: this.game.hard } }"
 				class="cs-btn"
 				>Hard Mode</router-link
 			>
