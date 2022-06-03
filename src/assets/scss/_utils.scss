@@ -22,6 +22,11 @@ body,
   }
 }
 
-#questions, #answers {
+#questions,
+#answers {
   color: var(--primary-bg-color);
+}
+
+#response {
+  color: var(--text-color);
 }

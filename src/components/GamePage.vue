@@ -11,7 +11,10 @@
 		</div>
 		<div id="started" v-else>
 			<GameQuestions :question="this.getRandomQuestion" />
-			<GameAnswers :answers="this.getRandomQuestion" />
+			<GameAnswers
+				:answers="this.getAnswers"
+				:correctAnswer="getCorrectAnswer"
+			/>
 		</div>
 	</div>
 </template>
@@ -31,7 +34,7 @@ export default {
 	computed: {
 		getDifficulty() {
 			let difficulty = "";
-			difficulty = Object.keys(this.$route.params)[0].toUpperCase();
+			difficulty = this.$route.params.title.toUpperCase();
 			// console.log(difficulty);
 			return difficulty;
 		},
@@ -46,15 +49,27 @@ export default {
 			}
 			return game;
 		},
+		getRandom() {
+			let random = Math.floor(Math.random() * this.getPath.level.length);
+			console.log(random);
+			return random;
+		},
 		getRandomQuestion() {
 			let game = [this.getPath];
-			let random = Math.floor(Math.random() * this.getPath.easy.length);
-			console.log(random);
-			let question = this.getPath.easy[random]["question"];
-			let answers = this.getPath.easy[random]["answers"];
-			console.log(question, answers);
-			game.splice(random, 1);
-			return question, answers;
+			let question = this.getPath.level[this.getRandom]["question"];
+			console.log(question);
+			game.splice(this.getRandom, 1);
+			return question;
+		},
+		getAnswers() {
+			let answers = this.getPath.level[this.getRandom]["all_answers"];
+			console.log(answers);
+			return answers;
+		},
+		getCorrectAnswer() {
+			let correctAnswer = this.getPath.level[this.getRandom]["correct_answer"];
+			console.log(correctAnswer);
+			return correctAnswer;
 		},
 	},
 	methods: {},
