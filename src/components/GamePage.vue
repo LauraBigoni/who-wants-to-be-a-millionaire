@@ -5,15 +5,24 @@
 				You choose:
 				<span class="fw-bold d-block">{{ this.getDifficulty }} Mode</span>
 			</h1>
-			<button type="button" class="fw-bold cs-btn" @click="isStarted = true">
+			<button
+				type="button"
+				class="fw-bold cs-btn"
+				@click="
+					isStarted = true;
+					countdownTimer();
+				"
+			>
 				START
 			</button>
 		</div>
 		<div id="started" v-else>
-			<GameQuestions :question="this.getRandomQuestion" />
+			<div id="timer" class="pt-2 display-2">30 sec</div>
+			<GameQuestions :question="getRandomQuestion()" />
 			<GameAnswers
-				:answers="this.getAnswers"
-				:correctAnswer="getCorrectAnswer"
+				@changeIndex="getRandom()"
+				:answers="getAnswers()"
+				:correctAnswer="getCorrectAnswer()"
 			/>
 		</div>
 	</div>
@@ -29,6 +38,10 @@ export default {
 	data() {
 		return {
 			isStarted: false,
+			time: 30,
+			timerId: setInterval(this.countdownTimer, 1000),
+			currentIndex: 0,
+			questionsPicked: [],
 		};
 	},
 	computed: {
@@ -40,41 +53,49 @@ export default {
 		},
 		getPath() {
 			let game = this.$route.params;
-			if (this.getDifficulty == "easy") {
-				game = this.$route.params.easy;
-			} else if (this.getDifficulty == "normal") {
-				game = this.$route.params.normal;
-			} else if (this.getDifficulty == "hard") {
-				game = this.$route.params.hard;
-			}
 			return game;
 		},
+	},
+	methods: {
 		getRandom() {
-			let random = Math.floor(Math.random() * this.getPath.level.length);
-			console.log(random);
-			return random;
+			if (this.questionsPicked.length < 12) {
+				this.currentIndex =
+					Math.floor(Math.random() * this.getPath.level.length) + 1;
+				console.log(this.currentIndex);
+				if (this.questionsPicked.indexOf(this.currentIndex) === -1)
+					this.questionsPicked.push(this.currentIndex);
+			}
+			console.log(this.questionsPicked);
 		},
 		getRandomQuestion() {
-			let game = [this.getPath];
-			let question = this.getPath.level[this.getRandom]["question"];
+			let question = this.getPath.level[this.currentIndex]["question"];
 			console.log(question);
-			game.splice(this.getRandom, 1);
 			return question;
 		},
 		getAnswers() {
-			let answers = this.getPath.level[this.getRandom]["all_answers"];
+			let answers = this.getPath.level[this.currentIndex]["all_answers"];
 			console.log(answers);
 			return answers;
 		},
 		getCorrectAnswer() {
-			let correctAnswer = this.getPath.level[this.getRandom]["correct_answer"];
+			let correctAnswer =
+				this.getPath.level[this.currentIndex]["correct_answer"];
 			console.log(correctAnswer);
 			return correctAnswer;
 		},
+		countdownTimer() {
+			if (this.time == -1) {
+				clearTimeout(this.timerId);
+				document.getElementById("timer").innerText = "Time's up!";
+			} else {
+				document.getElementById("timer").innerText = this.time + " " + "sec";
+				this.time--;
+			}
+		},
 	},
-	methods: {},
 	mounted() {
-		console.log(this.getPath);
+		console.log(this.getRandom());
+		// console.log(this.getPath);
 		// console.log(Object.keys(this.$route.params)[0]);
 		// console.log(this.getDifficulty);
 	},
