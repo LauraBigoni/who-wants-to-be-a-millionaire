@@ -6,16 +6,22 @@
 			:key="index"
 			:id="'answer-' + index"
 			@click="
-				isClickable ? checkCorrectAnswer(answer) : null; changeIndex()
+				isClickable ? checkCorrectAnswer(answer, index) : null;
+				changeIndex();
+				stopTimer();
 			"
+			:class="{
+				orange: isClickable && currentIndex === index,
+				green: questionIsCorrect && currentIndex === index,
+				red: !questionIsCorrect && questionIsAnswered && currentIndex === index,
+			}"
 		>
 			<div role="button" class="card-body">
 				<span>{{ answer }}</span>
 			</div>
 		</div>
 		<div id="response" class="mt-5" v-if="questionIsAnswered">
-			<h3 v-if="questionIsCorrect">Correct answer!</h3>
-			<h3 v-else>Wrong answer!</h3>
+			<h3>{{ this.questionIsCorrect ? "Correct" : "False" }}</h3>
 		</div>
 	</div>
 </template>
@@ -23,32 +29,48 @@
 <script>
 export default {
 	name: "GameAnswers",
-	props: ["answers", "correctAnswer"],
+	props: ["answers", "correctAnswer", "stop", "currIndex"],
 	data() {
 		return {
 			questionIsAnswered: false,
 			questionIsCorrect: false,
 			isClickable: true,
+			index: this.currIndex,
+			currentIndex: 0,
 		};
 	},
 	methods: {
-		checkCorrectAnswer(selectedAnswer) {
-			if (selectedAnswer === this.correctAnswer) {
-				this.questionIsCorrect = true;
-				console.log("correct");
-			} else {
-				this.questionIsCorrect = false;
-				console.log("incorrect");
-			}
-			this.isClickable = false;
+		checkCorrectAnswer(selectedAnswer, index) {
+			this.currentIndex = index;
+			console.log(index);
+			setTimeout(() => {
+				if (selectedAnswer === this.correctAnswer) {
+					this.questionIsCorrect = true;
+					console.log("correct");
+				} else {
+					this.questionIsCorrect = false;
+					console.log("incorrect");
+				}
+				this.isClickable = false;
+			}, 4000);
 			this.questionIsAnswered = true;
+			this.questionIsCorrect = false;
+			console.log(this.questionIsAnswered);
 		},
 		changeIndex() {
-			this.$emit('changeIndex');
+			setTimeout(() => {
+				this.questionIsAnswered = false;
+				this.questionIsCorrect = false;
+				console.log(this.questionIsAnswered);
+				this.$emit("changeIndex");
+			}, 4000);
+		},
+		stopTimer() {
+			this.$emit("stop");
 		},
 	},
 	mounted() {
-		// console.log(this.isClickable);
+		console.log(this.questionIsAnswered);
 	},
 };
 </script>

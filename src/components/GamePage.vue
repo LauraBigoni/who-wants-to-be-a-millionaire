@@ -17,12 +17,17 @@
 			</button>
 		</div>
 		<div id="started" v-else>
-			<div id="timer" class="pt-2 display-2">30 sec</div>
+			<div id="timer" class="pt-2 display-2" v-if="isStarted"></div>
 			<GameQuestions :question="getRandomQuestion()" />
 			<GameAnswers
-				@changeIndex="getRandom()"
+				@changeIndex="
+					getRandom();
+					countdownTimer();
+				"
 				:answers="getAnswers()"
 				:correctAnswer="getCorrectAnswer()"
+				:currIndex="this.currentIndex"
+				@stop="stop"
 			/>
 		</div>
 	</div>
@@ -39,9 +44,9 @@ export default {
 		return {
 			isStarted: false,
 			time: 30,
-			timerId: setInterval(this.countdownTimer, 1000),
 			currentIndex: 0,
 			questionsPicked: [],
+			timerId: setInterval(this.countdownTimer, 1000),
 		};
 	},
 	computed: {
@@ -58,13 +63,17 @@ export default {
 	},
 	methods: {
 		getRandom() {
-			if (this.questionsPicked.length < 12) {
-				this.currentIndex =
-					Math.floor(Math.random() * this.getPath.level.length) + 1;
-				console.log(this.currentIndex);
-				if (this.questionsPicked.indexOf(this.currentIndex) === -1)
-					this.questionsPicked.push(this.currentIndex);
+			this.countdownTimer();
+			this.currentIndex =
+				Math.floor(Math.random() * this.getPath.level.length) + 1;
+			if (!this.questionsPicked.includes(this.currentIndex)) {
+				this.questionsPicked.push(this.currentIndex);
+			} else if (this.questionsPicked.length !== 12) {
+				this.getRandom();
+			} else if (this.questionsPicked.length == 12) {
+				return;
 			}
+			console.log(this.currentIndex);
 			console.log(this.questionsPicked);
 		},
 		getRandomQuestion() {
@@ -83,18 +92,21 @@ export default {
 			console.log(correctAnswer);
 			return correctAnswer;
 		},
+		stop() {
+			this.time = 30;
+		},
 		countdownTimer() {
+			document.getElementById("timer").innerText = this.time + " " + "sec";
+			this.time--;
 			if (this.time == -1) {
+				this.stop();
 				clearTimeout(this.timerId);
 				document.getElementById("timer").innerText = "Time's up!";
-			} else {
-				document.getElementById("timer").innerText = this.time + " " + "sec";
-				this.time--;
 			}
 		},
 	},
 	mounted() {
-		console.log(this.getRandom());
+		// console.log(this.getRandom());
 		// console.log(this.getPath);
 		// console.log(Object.keys(this.$route.params)[0]);
 		// console.log(this.getDifficulty);
