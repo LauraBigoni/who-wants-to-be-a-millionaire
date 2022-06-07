@@ -13,6 +13,7 @@
 					isStarted = true;
 					start();
 					countdownTimer();
+					startTimerMusic();
 				"
 			>
 				START
@@ -43,6 +44,18 @@
 			</div>
 			<PrizesPage :nextPagePrize="nextPagePrize" />
 		</div>
+		<div id="audio">
+			<audio id="lets-play" src="../assets/sounds/sounds_lets_play.mp3"></audio>
+			<audio id="easy" src="../assets/sounds/sounds_easy.mp3"></audio>
+			<audio
+				id="wrong-answer"
+				src="../assets/sounds/sounds_wrong_answer.mp3"
+			></audio>
+			<audio
+				id="correct-answer"
+				src="../assets/sounds/sounds_correct_answer.mp3"
+			></audio>
+		</div>
 	</div>
 </template>
 
@@ -64,6 +77,8 @@ export default {
 			timerId: null,
 			nextPagePrize: null,
 			isComplete: false,
+			timeoutId: null,
+			isStopped: false,
 		};
 	},
 	computed: {
@@ -142,7 +157,11 @@ export default {
 				if (value) {
 					this.clear();
 					this.isValid = false;
+					this.isStopped = true;
+					this.wrongAudio();
 					document.getElementById("timer").innerText = " ";
+				} else if (!value) {
+					this.correctAudio();
 				}
 			}, 2000);
 			// console.log(value);
@@ -151,13 +170,52 @@ export default {
 			this.nextPagePrize = page;
 			// console.log(page);
 		},
+		// * AUDIO
+		startTimerMusic() {
+			const letsPlayAudio = document.getElementById("lets-play");
+			letsPlayAudio.play();
+			letsPlayAudio.volume = 0.3;
+			this.timeoutId = setTimeout(() => {
+				this.easyAudio();
+			}, 2500);
+		},
+		stopTimerMusic() {
+			clearTimeout(this.timeoutId);
+		},
+		wrongAudio() {
+			const wrongAnswerAudio = document.getElementById("wrong-answer");
+			wrongAnswerAudio.play();
+			wrongAnswerAudio.volume = 0.5;
+			if (this.isStopped) {
+				this.stopTimerMusic();
+			}
+		},
+		correctAudio() {
+			const correctAnswerAudio = document.getElementById("correct-answer");
+			correctAnswerAudio.play();
+			correctAnswerAudio.volume = 0.3;
+			// if (!this.isStopped) {
+			// 	this.stopTimerMusic();
+			// 	correctAnswerAudio.pause();
+			// 	correctAnswerAudio.currentTime = 0;
+			// }
+		},
+		easyAudio() {
+			const easyPlayAudio = document.getElementById("easy");
+			easyPlayAudio.play();
+			easyPlayAudio.volume = 0.3;
+			if (this.isStopped) {
+				this.stopTimerMusic();
+				easyPlayAudio.pause();
+				easyPlayAudio.currentTime = 0;
+			}
+		},
 	},
 	mounted() {
 		this.checkParams();
 		// console.log(this.$route.params);
 		// console.log(this.getDifficulty);
 		// console.log(this.getRandom());
-		// console.log(this.getPath.title);
 	},
 };
 </script>
