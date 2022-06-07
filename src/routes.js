@@ -13,11 +13,17 @@ const router = new VueRouter({
   mode: 'history',
   linkExactActiveClass: 'active',
   routes: [
-    { path: '/', component: HomePage, name: 'home' },
-    { path: '/game', component: GamePage, name: 'game' },
+    {
+      path: '/', component: HomePage, name: 'home'
+    },
+    {
+      path: '/game/:title', component: GamePage, name: 'game'
+    },
 
     // !!! LA 404 SEMPRE ULTIMA
-    { path: '*', component: NotFoundPage, name: 'not-found' }
+    {
+      path: '*', component: NotFoundPage, name: 'not-found'
+    }
   ]
 });
 

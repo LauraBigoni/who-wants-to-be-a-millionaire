@@ -50,13 +50,14 @@ export default {
 					console.log("correct");
 				} else {
 					this.questionIsWrong = true;
+					this.isWrong();
 					this.isActive = false;
 					console.log("incorrect");
 				}
 				this.isClickable = false;
 			}, 2000);
 			this.questionIsAnswered = true;
-			console.log(this.isValid);
+			// console.log(this.isValid);
 			// console.log(this.questionIsAnswered);
 		},
 		changeIndex() {
@@ -75,6 +76,9 @@ export default {
 		},
 		startTimer() {
 			this.$emit("start");
+		},
+		isWrong() {
+			this.$emit("isWrong", this.questionIsWrong);
 		},
 	},
 	mounted() {},

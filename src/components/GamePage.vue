@@ -8,7 +8,7 @@
 			</h1>
 			<button
 				type="button"
-				class="fw-bold cs-btn"
+				class="cs-btn"
 				@click="
 					isStarted = true;
 					start();
@@ -19,15 +19,24 @@
 			</button>
 		</div>
 		<div id="started" v-else>
-			<GameQuestions :question="getRandomQuestion()" />
+			<GameQuestions v-if="isValid" :question="getRandomQuestion()" />
 			<GameAnswers
+				v-if="isValid"
 				@changeIndex="getRandom()"
 				:answers="getAnswers()"
 				:correctAnswer="getCorrectAnswer()"
 				:isValid="isValid"
 				@clear="clear"
 				@start="start"
+				@isWrong="isWrong($event)"
 			/>
+			<div id="lost" v-if="!isValid">
+				<h1 class="py-5">You Lost.</h1>
+				<router-link :to="{ name: 'home' }" class="py-3 px-4 text-center cs-btn"
+					>TRY AGAIN</router-link
+				>
+			</div>
+			<PrizesPage />
 		</div>
 	</div>
 </template>
@@ -35,10 +44,11 @@
 <script>
 import GameQuestions from "./GameQuestions.vue";
 import GameAnswers from "./GameAnswers.vue";
+import PrizesPage from "./PrizesPage.vue";
 
 export default {
 	name: "GamePage",
-	components: { GameQuestions, GameAnswers },
+	components: { GameQuestions, GameAnswers, PrizesPage },
 	data() {
 		return {
 			isStarted: false,
@@ -50,15 +60,15 @@ export default {
 		};
 	},
 	computed: {
-		getDifficulty() {
-			let difficulty = "";
-			difficulty = this.$route.params.title.toUpperCase();
-			// console.log(difficulty);
-			return difficulty;
-		},
 		getPath() {
 			let game = this.$route.params;
 			return game;
+		},
+		getDifficulty() {
+			let difficulty = "";
+			difficulty = this.getPath.title.toUpperCase();
+			// console.log(difficulty);
+			return difficulty;
 		},
 	},
 	methods: {
@@ -96,9 +106,6 @@ export default {
 		start() {
 			this.timerId = setInterval(this.countdownTimer, 1000);
 		},
-		stop() {
-			this.time = 30;
-		},
 		clear() {
 			clearInterval(this.timerId);
 			this.time = 30;
@@ -110,16 +117,35 @@ export default {
 				this.time--;
 				if (this.time == -1) {
 					this.clear();
+					this.isValid = false;
 					document.getElementById("timer").innerText = "Time's up!";
 				}
 			}
 		},
+		checkParams() {
+			if (!Object.prototype.hasOwnProperty.call(this.$route.params, "level")) {
+				this.$router.push({
+					name: "not-found",
+				});
+			}
+		},
+		isWrong(value) {
+			setTimeout(() => {
+				if (value) {
+					this.clear();
+					this.isValid = false;
+					document.getElementById("timer").innerText = " ";
+				}
+			}, 2000);
+			console.log(value);
+		},
 	},
 	mounted() {
-		// console.log(this.getRandom());
-		// console.log(this.getPath);
-		// console.log(Object.keys(this.$route.params)[0]);
+		this.checkParams();
+		// console.log(this.$route.params);
 		// console.log(this.getDifficulty);
+		// console.log(this.getRandom());
+		// console.log(this.getPath.title);
 	},
 };
 </script>
