@@ -22,8 +22,9 @@ body,
   }
 }
 
-#questions,
-#answers {
+#question,
+#answers,
+#prizes {
   color: var(--primary-bg-color);
 }
 
@@ -32,13 +33,13 @@ body,
 }
 
 .orange {
-  background-color: orange;
+  background-color: rgb(250, 162, 0);
 }
 
 .red {
-  background-color: red;
+  background-color: rgb(255, 19, 19);
 }
 
 .green {
-  background-color: green;
+  background-color: rgb(1, 131, 1);
 }
