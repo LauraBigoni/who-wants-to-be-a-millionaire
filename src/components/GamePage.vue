@@ -10,8 +10,9 @@
 				type="button"
 				class="fw-bold cs-btn"
 				@click="
-					countdownTimer();
 					isStarted = true;
+					start();
+					countdownTimer();
 				"
 			>
 				START
@@ -24,8 +25,8 @@
 				:answers="getAnswers()"
 				:correctAnswer="getCorrectAnswer()"
 				:isValid="isValid"
-				@stop="stop"
 				@clear="clear"
+				@start="start"
 			/>
 		</div>
 	</div>
@@ -45,7 +46,7 @@ export default {
 			currentIndex: 0,
 			questionsPicked: [0],
 			isValid: true,
-			timerId: setInterval(this.countdownTimer, 1000),
+			timerId: null,
 		};
 	},
 	computed: {
@@ -92,20 +93,22 @@ export default {
 			// console.log(correctAnswer);
 			return correctAnswer;
 		},
+		start() {
+			this.timerId = setInterval(this.countdownTimer, 1000);
+		},
 		stop() {
 			this.time = 30;
 		},
 		clear() {
+			clearInterval(this.timerId);
 			this.time = 30;
-			clearTimeout(this.timerId);
+			this.timerId = null;
 		},
 		countdownTimer() {
 			if (this.isStarted) {
-				this.timerId;
 				document.getElementById("timer").innerText = this.time + " " + "sec";
 				this.time--;
 				if (this.time == -1) {
-					this.stop();
 					this.clear();
 					document.getElementById("timer").innerText = "Time's up!";
 				}

@@ -1,5 +1,5 @@
 <template>
-	<div class="card my-5 py-2" id="questions">
+	<div class="card mt-2 mb-5 py-2" id="questions">
 		<div class="card-body">{{ this.question }}</div>
 	</div>
 </template>

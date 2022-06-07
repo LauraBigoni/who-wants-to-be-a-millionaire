@@ -8,7 +8,7 @@
 			@click="
 				isClickable ? checkCorrectAnswer(answer, i) : null;
 				isValid ? changeIndex() : null;
-				stopTimer();
+				clearTimer();
 			"
 			:class="{
 				orange: isActive && currentIndex === i,
@@ -26,7 +26,7 @@
 <script>
 export default {
 	name: "GameAnswers",
-	props: ["answers", "correctAnswer", "stop", "isValid"],
+	props: ["answers", "correctAnswer", "clear", "start", "isValid"],
 	data() {
 		return {
 			questionIsAnswered: false,
@@ -67,18 +67,17 @@ export default {
 				this.questionIsWrong = false;
 				// console.log(this.questionIsAnswered);
 				this.$emit("changeIndex");
+				this.startTimer();
 			}, 4000);
-		},
-		stopTimer() {
-			this.$emit("stop");
 		},
 		clearTimer() {
 			this.$emit("clear");
 		},
+		startTimer() {
+			this.$emit("start");
+		},
 	},
-	mounted() {
-		
-	},
+	mounted() {},
 };
 </script>
 
