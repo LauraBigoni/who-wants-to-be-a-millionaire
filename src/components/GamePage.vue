@@ -1,5 +1,6 @@
 <template>
 	<div id="game">
+		<div id="timer" class="pt-2 display-2"></div>
 		<div id="choose" v-if="!isStarted">
 			<h1 class="py-5">
 				You choose:
@@ -9,25 +10,22 @@
 				type="button"
 				class="fw-bold cs-btn"
 				@click="
-					isStarted = true;
 					countdownTimer();
+					isStarted = true;
 				"
 			>
 				START
 			</button>
 		</div>
 		<div id="started" v-else>
-			<div id="timer" class="pt-2 display-2" v-if="isStarted"></div>
 			<GameQuestions :question="getRandomQuestion()" />
 			<GameAnswers
-				@changeIndex="
-					getRandom();
-					countdownTimer();
-				"
+				@changeIndex="getRandom()"
 				:answers="getAnswers()"
 				:correctAnswer="getCorrectAnswer()"
-				:currIndex="this.currentIndex"
+				:isValid="isValid"
 				@stop="stop"
+				@clear="clear"
 			/>
 		</div>
 	</div>
@@ -45,7 +43,8 @@ export default {
 			isStarted: false,
 			time: 30,
 			currentIndex: 0,
-			questionsPicked: [],
+			questionsPicked: [0],
+			isValid: true,
 			timerId: setInterval(this.countdownTimer, 1000),
 		};
 	},
@@ -71,37 +70,45 @@ export default {
 			} else if (this.questionsPicked.length !== 12) {
 				this.getRandom();
 			} else if (this.questionsPicked.length == 12) {
-				return;
+				this.isValid = false;
+				return false;
 			}
 			console.log(this.currentIndex);
 			console.log(this.questionsPicked);
 		},
 		getRandomQuestion() {
 			let question = this.getPath.level[this.currentIndex]["question"];
-			console.log(question);
+			// console.log(question);
 			return question;
 		},
 		getAnswers() {
 			let answers = this.getPath.level[this.currentIndex]["all_answers"];
-			console.log(answers);
+			// console.log(answers);
 			return answers;
 		},
 		getCorrectAnswer() {
 			let correctAnswer =
 				this.getPath.level[this.currentIndex]["correct_answer"];
-			console.log(correctAnswer);
+			// console.log(correctAnswer);
 			return correctAnswer;
 		},
 		stop() {
 			this.time = 30;
 		},
+		clear() {
+			this.time = 30;
+			clearTimeout(this.timerId);
+		},
 		countdownTimer() {
-			document.getElementById("timer").innerText = this.time + " " + "sec";
-			this.time--;
-			if (this.time == -1) {
-				this.stop();
-				clearTimeout(this.timerId);
-				document.getElementById("timer").innerText = "Time's up!";
+			if (this.isStarted) {
+				this.timerId;
+				document.getElementById("timer").innerText = this.time + " " + "sec";
+				this.time--;
+				if (this.time == -1) {
+					this.stop();
+					this.clear();
+					document.getElementById("timer").innerText = "Time's up!";
+				}
 			}
 		},
 	},

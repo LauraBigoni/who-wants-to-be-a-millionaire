@@ -13,7 +13,7 @@ export default {
 	},
 	computed: {},
 	mounted() {
-		console.log(this.question);
+		// console.log(this.question);
 	},
 };
 </script>
