@@ -44,13 +44,13 @@ export default {
 					{
 						question: "How would one say goodbye in Spanish?",
 						correct_answer: "Adios",
-						all_answers: ["Adios", "Hola", "Salir", "Au Revoir"],
+						all_answers: ["Hola", "Salir", "Au Revoir", "Adios"],
 					},
 					{
 						question:
 							"Which of the following regions is NOT a part of the United Kingdom?",
 						correct_answer: "The isle of man",
-						all_answers: ["The isle of man", "England", "Scotland", "Wales"],
+						all_answers: ["England", "Scotland", "The isle of man", "Wales"],
 					},
 					{
 						question: "English belongs to what Indo-European language family?",
@@ -66,16 +66,16 @@ export default {
 					{
 						question: "What does the British slang “tosh” stand for?",
 						correct_answer: "Nonsense",
-						all_answers: ["Nonsense", "Dishes", "Dough", "Purse"],
+						all_answers: ["Dishes", "Nonsense", "Dough", "Purse"],
 					},
 					{
 						question: "What is the more common name for a “lexicon”?",
 						correct_answer: "Dictionary",
 						all_answers: [
-							"Dictionary",
 							"Prayer Book",
 							"Autobiography",
 							"Travel Guide",
+							"Dictionary",
 						],
 					},
 					{
@@ -86,13 +86,13 @@ export default {
 					{
 						question: "What does the word “renaissance” stand for?",
 						correct_answer: "Rebirth",
-						all_answers: ["Rebirth", "Truth", "Life", "Knowledge"],
+						all_answers: ["Truth", "Rebirth", "Life", "Knowledge"],
 					},
 					{
 						question:
 							"What was the first country to recognize Lithuania’s independence?",
 						correct_answer: "Iceland",
-						all_answers: ["Iceland", "Sweden", "Russia", "United States"],
+						all_answers: ["Sweden", "Russia", "Iceland", "United States"],
 					},
 					{
 						question:
@@ -104,8 +104,8 @@ export default {
 						question: "Which famous theologian founded Protestantism?",
 						correct_answer: "Martin Luther",
 						all_answers: [
-							"Martin Luther",
 							"Voltear",
+							"Martin Luther",
 							"Adolf Hitler",
 							"Ignatius Loyola",
 						],
@@ -114,9 +114,9 @@ export default {
 						question: "Poisson d’Avril is the French equivalent of what day?",
 						correct_answer: "April Fools",
 						all_answers: [
-							"April Fools",
 							"Good Friday",
 							"Christmas Eve",
+							"April Fools",
 							"Thanksgiving",
 						],
 					},

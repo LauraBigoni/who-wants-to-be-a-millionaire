@@ -35,13 +35,14 @@ export default {
 			isClickable: true,
 			isActive: false,
 			currentIndex: 0,
+			pagePrize: -1,
 		};
 	},
 	methods: {
 		checkCorrectAnswer(selectedAnswer, index) {
 			this.currentIndex = index;
 			this.isActive = true;
-			console.log(index);
+			// console.log(index);
 
 			setTimeout(() => {
 				if (selectedAnswer === this.correctAnswer) {
@@ -66,8 +67,10 @@ export default {
 				this.questionIsAnswered = false;
 				this.questionIsCorrect = false;
 				this.questionIsWrong = false;
+				this.pagePrize++;
 				// console.log(this.questionIsAnswered);
 				this.$emit("changeIndex");
+				this.nextPrize();
 				this.startTimer();
 			}, 4000);
 		},
@@ -79,6 +82,9 @@ export default {
 		},
 		isWrong() {
 			this.$emit("isWrong", this.questionIsWrong);
+		},
+		nextPrize() {
+			this.$emit("nextPrize", this.pagePrize);
 		},
 	},
 	mounted() {},

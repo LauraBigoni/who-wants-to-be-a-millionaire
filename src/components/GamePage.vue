@@ -1,6 +1,6 @@
 <template>
 	<div id="game">
-		<div id="timer" class="pt-2 display-2"></div>
+		<div id="timer" class="pt-2 display-2" v-if="!isComplete"></div>
 		<div id="choose" v-if="!isStarted">
 			<h1 class="py-5">
 				You choose:
@@ -22,21 +22,26 @@
 			<GameQuestions v-if="isValid" :question="getRandomQuestion()" />
 			<GameAnswers
 				v-if="isValid"
-				@changeIndex="getRandom()"
+				:isValid="isValid"
 				:answers="getAnswers()"
 				:correctAnswer="getCorrectAnswer()"
-				:isValid="isValid"
+				@changeIndex="getRandom()"
 				@clear="clear"
 				@start="start"
 				@isWrong="isWrong($event)"
+				@nextPrize="nextPrize($event)"
 			/>
-			<div id="lost" v-if="!isValid">
+			<div id="lost" v-if="!isValid && !isComplete">
 				<h1 class="py-5">You Lost.</h1>
 				<router-link :to="{ name: 'home' }" class="py-3 px-4 text-center cs-btn"
 					>TRY AGAIN</router-link
 				>
 			</div>
-			<PrizesPage />
+			<div id="win" v-if="isComplete">
+				<h2 class="py-5">CONGRATULATIONS</h2>
+				<h2 class="pb-5">You Won 1.000.000 $ !</h2>
+			</div>
+			<PrizesPage :nextPagePrize="nextPagePrize" />
 		</div>
 	</div>
 </template>
@@ -57,6 +62,8 @@ export default {
 			questionsPicked: [0],
 			isValid: true,
 			timerId: null,
+			nextPagePrize: null,
+			isComplete: false,
 		};
 	},
 	computed: {
@@ -82,10 +89,11 @@ export default {
 				this.getRandom();
 			} else if (this.questionsPicked.length == 12) {
 				this.isValid = false;
-				return false;
+				this.clear();
+				return (this.isComplete = true);
 			}
-			console.log(this.currentIndex);
-			console.log(this.questionsPicked);
+			// console.log(this.currentIndex);
+			// console.log(this.questionsPicked);
 		},
 		getRandomQuestion() {
 			let question = this.getPath.level[this.currentIndex]["question"];
@@ -137,7 +145,11 @@ export default {
 					document.getElementById("timer").innerText = " ";
 				}
 			}, 2000);
-			console.log(value);
+			// console.log(value);
+		},
+		nextPrize(page) {
+			this.nextPagePrize = page;
+			// console.log(page);
 		},
 	},
 	mounted() {
